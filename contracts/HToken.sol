@@ -24,6 +24,7 @@ contract HToken is ERC20, Ownable {
     function mint(uint256 amount) public onlyOwner {
         if(MAX_SUPPLY < (amount + currentSupply)) revert ExceedsMintLimit();
         _mint(msg.sender, amount);
+        currentSupply += amount;
     }
 
     function transfer(address to, uint256 amount) public override returns (bool) {
