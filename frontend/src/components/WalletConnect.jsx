@@ -16,7 +16,7 @@ const WalletConnect = () => {
             window.ethereum.on("accountsChanged", () => {
                 setIsWalletConnected(false);
             });
-             window.ethereum.on("networkChanged", () => {
+            window.ethereum.on("networkChanged", () => {
                 window.location.reload()
             });
         }
@@ -58,7 +58,10 @@ const WalletConnect = () => {
                             </div>
                             <div style={{ alignContent: "center" }}>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <div style={{ borderRadius: "50%", height: "10px", width: "10px", backgroundColor: "green", marginRight: "10px" }}></div>
+                                    <div style={{
+                                        borderRadius: "50%", height: "10px", width: "10px",
+                                        backgroundColor: "green", marginRight: "10px"
+                                    }}></div>
                                     <p>Connected</p>
                                 </div>
                             </div>
@@ -67,11 +70,8 @@ const WalletConnect = () => {
                     :
                     (
                         <div>
-                            <button onClick={connectWallet}
-                                style={{
-                                    padding: "6px", borderRadius: "6px", backgroundColor: "transparent",
-                                    cursor: "pointer", border: "1px grey solid", outline: "none"
-                                }}>
+                            <p style={{ marginBottom: "20px", color: "gray" }}>Connect your wallet to continue......</p>
+                            <button onClick={connectWallet} >
                                 Connect Wallet
                             </button>
                         </div>

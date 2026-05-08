@@ -5,6 +5,7 @@
   place-content: center;
   place-items: center;
   flex-grow: 1;
+  width: 90%;
 
   @media (max-width: 1024px) {
     padding: 32px 20px 24px;
@@ -30,4 +31,34 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+input {
+  height: 30px;
+  min-width: 120px;
+  background: transparent;
+  border: 1px gray solid;
+  outline: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  width: 95%;
+  display: block;
+}
+
+button {
+  height: 40px;
+  width: auto;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #7033ff;
+}
+
+.button:hover {
+  box-shadow: 0 8px 25px rgba(78, 38, 254, 0.521);
 }
