@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const WalletContext = createContext();
 
@@ -8,6 +9,18 @@ export const WalletProvider = ({ children }) => {
     const [account, setAccount] = useState();
     const [isConnected, setIsConnected] = useState(false);
     const [contract, setContract] = useState();
+
+    const showToast = (text, type) => {
+        if (type === "success") {
+            toast.success(text);
+        }
+        else if (type === "error") {
+            toast.error(text);
+        }
+        else {
+            toast(text);
+        }
+    };
 
     return (
         <WalletContext.Provider
@@ -19,7 +32,8 @@ export const WalletProvider = ({ children }) => {
                 isConnected,
                 setIsConnected,
                 contract,
-                setContract
+                setContract,
+                showToast
             }}
         >
             {children}

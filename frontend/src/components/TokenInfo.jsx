@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "../context/WalletContext";
+import { ethers } from "ethers";
 
 const TokenInfo = () => {
 
@@ -14,8 +15,8 @@ const TokenInfo = () => {
             let data = [];
             data.push({ key: "Name", value: await contract.name() });
             data.push({ key: "Symbol", value: await contract.symbol() });
-            data.push({ key: "Total Supply", value: await contract.totalSupply() });
-            data.push({ key: "Your Balance", value: await contract.balanceOf(account) });
+            data.push({ key: "Total Supply", value: await contract.totalSupply() / (10n ** 18n) });
+            data.push({ key: "Your Balance", value: await contract.balanceOf(account) / (10n ** 18n) });
             setTokenData(data);
         }
 

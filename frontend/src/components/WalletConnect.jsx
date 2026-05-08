@@ -5,7 +5,7 @@ import contractData from "../utils/HToken.json";
 import TokenInfo from "./TokenInfo";
 
 const WalletConnect = () => {
-    const { setSigner, isConnected, setIsConnected, setContract, account, setAccount } = useWallet();
+    const { setSigner, isConnected, setIsConnected, setContract, account, setAccount, showToast } = useWallet();
 
     useEffect(() => {
         window.ethereum.on("chainChanged", () => {
@@ -22,6 +22,7 @@ const WalletConnect = () => {
             return;
         }
         if (typeof window.ethereum !== "undefined") {
+            try{
             const provider = new ethers.BrowserProvider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
@@ -32,6 +33,10 @@ const WalletConnect = () => {
             setSigner(signer);
             setAccount(address);
             getContract(signer);
+            showToast("Wallet Connected", "success");
+            } catch(err) {
+                showToast("Wallet connection failed.", "error");
+            }
         }
     }
 

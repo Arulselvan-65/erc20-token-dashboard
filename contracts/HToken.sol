@@ -17,7 +17,6 @@ contract HToken is ERC20, Ownable {
     }
 
     error ExceedsMintLimit();
-    error InsufficientBalance();
     event TokenMinted(address indexed to, uint256 amount);
 
     function mint(address to, uint256 amount) public onlyOwner {
