@@ -48,7 +48,7 @@ input {
 
 button {
   height: 40px;
-  width: auto;
+  width: 150px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -59,6 +59,7 @@ button {
   background-color: #7033ff;
 }
 
-.button:hover {
+.connect-button:hover {
   box-shadow: 0 8px 25px rgba(78, 38, 254, 0.521);
 }
+

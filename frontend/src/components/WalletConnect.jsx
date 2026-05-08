@@ -5,24 +5,22 @@ import contractData from "../utils/HToken.json";
 import TokenInfo from "./TokenInfo";
 
 const WalletConnect = () => {
-    const { setSigner, setIsConnected, setContract, account, setAccount } = useWallet();
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const { setSigner, isConnected, setIsConnected, setContract, account, setAccount } = useWallet();
 
     useEffect(() => {
-        if (window.ethereum) {
-            window.ethereum.on("chainChanged", () => {
-                setIsWalletConnected(false);
-            });
-            window.ethereum.on("accountsChanged", () => {
-                setIsWalletConnected(false);
-            });
-            window.ethereum.on("networkChanged", () => {
-                window.location.reload()
-            });
-        }
+        window.ethereum.on("chainChanged", () => {
+            setIsConnected(false);
+        });
+        window.ethereum.on("accountsChanged", () => {
+            setIsConnected(false);
+        });
     });
 
     const connectWallet = async () => {
+        if (!window.ethereum) {
+            alert("Please install MetaMask");
+            return;
+        }
         if (typeof window.ethereum !== "undefined") {
             const provider = new ethers.BrowserProvider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
@@ -30,7 +28,6 @@ const WalletConnect = () => {
             const address = await signer.getAddress();
             const message = `Connect and sign with React DApp at ${new Date().toLocaleString()}`;
             await signer.signMessage(message);
-            setIsWalletConnected(true);
             setIsConnected(true);
             setSigner(signer);
             setAccount(address);
@@ -46,7 +43,7 @@ const WalletConnect = () => {
     return (
         <>
             {
-                isWalletConnected ?
+                isConnected ?
                     (
                         <div className="card" style={{
                             border: "1px gray solid", width: "90%", height: "auto", borderRadius: "12px", display: "flex",
@@ -71,7 +68,7 @@ const WalletConnect = () => {
                     (
                         <div>
                             <p style={{ marginBottom: "20px", color: "gray" }}>Connect your wallet to continue......</p>
-                            <button onClick={connectWallet} >
+                            <button onClick={connectWallet} className="connect-button">
                                 Connect Wallet
                             </button>
                         </div>
