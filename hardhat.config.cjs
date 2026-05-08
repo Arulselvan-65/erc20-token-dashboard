@@ -1,9 +1,9 @@
 require("@nomicfoundation/hardhat-toolbox");
-const prompt = require("prompt-sync")();
+require("dotenv").config();
 
-const privateKey = prompt("Enter private key: ");
-const rpcUrl = prompt("Enter RPC URL: ");
-const apiKey = prompt("Enter Etherscan API Key: ");
+const privateKey = process.env.PRIVATE_KEY || "";
+const rpcUrl = process.env.RPC_URL || "";
+const apiKey = process.env.API_KEY || "";
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
