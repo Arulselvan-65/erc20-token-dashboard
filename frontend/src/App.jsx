@@ -1,14 +1,18 @@
-import { useState } from 'react'
-import viteLogo from './assets/vite.svg'
-import './App.css'
-import WalletConnect from './components/WalletConnect'
-import { WalletProvider } from './context/WalletContext'
-import TokenInfo from './components/TokenInfo'
-import Transfer from './components/Transfer'
-import 'react-toastify/dist/ReactToastify.css'
-import { ToastContainer } from "react-toastify"
+import { useState } from 'react';
+import viteLogo from './assets/vite.svg';
+import './App.css';
+import WalletConnect from './components/WalletConnect';
+import { useWallet, WalletProvider } from './context/WalletContext';
+import TokenInfo from './components/TokenInfo';
+import Mint from './components/Mint';
+import Transfer from './components/Transfer';
+import EventLog from './components/EventLog';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 function App() {
+
+  const { isOwner } = useWallet();
 
   return (
     <>
@@ -26,7 +30,9 @@ function App() {
           <h1 style={{ color: "#7237fc", fontWeight: "bold" }}>HToken Dashboard</h1>
           <WalletConnect />
           <TokenInfo />
+          <Mint />
           <Transfer />
+          <EventLog />
         </section>
       </WalletProvider>
     </>

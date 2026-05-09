@@ -9,6 +9,7 @@ export const WalletProvider = ({ children }) => {
     const [account, setAccount] = useState();
     const [isConnected, setIsConnected] = useState(false);
     const [contract, setContract] = useState();
+    const [isOwner, setIsOwner] = useState(false);
 
     const showToast = (text, type) => {
         if (type === "success") {
@@ -33,7 +34,9 @@ export const WalletProvider = ({ children }) => {
                 setIsConnected,
                 contract,
                 setContract,
-                showToast
+                showToast,
+                isOwner,
+                setIsOwner
             }}
         >
             {children}

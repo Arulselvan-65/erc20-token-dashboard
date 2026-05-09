@@ -5,7 +5,7 @@ import contractData from "../utils/HToken.json";
 import TokenInfo from "./TokenInfo";
 
 const WalletConnect = () => {
-    const { setSigner, isConnected, setIsConnected, setContract, account, setAccount, showToast } = useWallet();
+    const { setSigner, isConnected, setIsConnected, setContract, account, setAccount, showToast, setIsOwner } = useWallet();
 
     useEffect(() => {
         window.ethereum.on("chainChanged", () => {
@@ -22,27 +22,29 @@ const WalletConnect = () => {
             return;
         }
         if (typeof window.ethereum !== "undefined") {
-            try{
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            const signer = await provider.getSigner();
-            const address = await signer.getAddress();
-            const message = `Connect and sign with React DApp at ${new Date().toLocaleString()}`;
-            await signer.signMessage(message);
-            setIsConnected(true);
-            setSigner(signer);
-            setAccount(address);
-            getContract(signer);
-            showToast("Wallet Connected", "success");
-            } catch(err) {
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = await provider.getSigner();
+                const address = await signer.getAddress();
+                const message = `Connect and sign with React DApp at ${new Date().toLocaleString()}`;
+                await signer.signMessage(message);
+                setIsConnected(true);
+                setSigner(signer);
+                setAccount(address);
+                getContract(signer, address);
+                showToast("Wallet Connected", "success");
+            } catch (err) {
                 showToast("Wallet connection failed.", "error");
             }
         }
     }
 
-    const getContract = async (signer) => {
+    const getContract = async (signer, address) => {
         const contract = await new ethers.Contract(contractData.address, contractData.abi, signer);
         setContract(contract);
+        const owner = await contract.owner();
+        if (owner == address) setIsOwner(true);
     }
 
     return (

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useWallet } from "../context/WalletContext";
 import { ethers } from "ethers";
 
-const Transfer = () => {
+const Mint = () => {
 
-    const { signer, contract, isConnected, account, showToast } = useWallet();
+    const { signer, contract, isConnected, account, showToast, isOwner } = useWallet();
     const [recipient, setRecipient] = useState([]);
     const [amount, setAmount] = useState(0);
 
@@ -18,11 +18,10 @@ const Transfer = () => {
             showToast("Enter a valid token amount.", "error");
             return;
         }
-
         try {
-            const tx = await contract.transfer(recipient, ethers.parseEther(`${amount}`));
+            const tx = await contract.mint(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
-            contract.on("Transfer", showToast("Token Transferred", "success"));
+            contract.on("TokenMinted", showToast("Token Minted", "success"));
             await new Promise((resolve) => setTimeout(resolve, 4000));
             window.location.reload();
             return;
@@ -33,8 +32,11 @@ const Transfer = () => {
             }
             const decodedError = contract.interface.parseError(err.data);
             switch (decodedError.name) {
-                case "ERC20InsufficientBalance":
-                    showToast("Insufficient Balance", "error");
+                case "OwnableUnauthorizedAccount":
+                    showToast("Only owner is allowed to mint", "error");
+                    break;
+                case "ExceedsMintLimit":
+                    showToast("Mint Limit Exceeds!", "error");
                     break;
                 default:
                     showToast(`Contract error: ${decodedError.name}`, "error");
@@ -44,8 +46,8 @@ const Transfer = () => {
 
     return (
         <>
-            {
-                isConnected ?
+            { 
+                (isConnected && isOwner) ?
                     (
                         <div className="card" style={{
                             border: "1px gray solid", width: "90%", height: "auto", borderRadius: "12px", display: "flex",
@@ -53,7 +55,7 @@ const Transfer = () => {
                         }}>
                             <div style={{ justifyItems: "left", marginBottom: "10px" }}>
                                 <p style={{ fontSize: "20px", fontWeight: "bold" }}>
-                                    Transfer Tokens
+                                    Mint Tokens 
                                 </p>
                             </div>
 
@@ -81,7 +83,7 @@ const Transfer = () => {
                                 </div>
                                 <div>
                                     <button>
-                                        Transfer
+                                        Mint Tokens
                                     </button>
                                 </div>
                             </form>
@@ -93,4 +95,4 @@ const Transfer = () => {
     )
 }
 
-export default Transfer;
+export default Mint;
