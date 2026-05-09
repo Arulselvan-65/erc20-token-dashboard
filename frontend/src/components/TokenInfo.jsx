@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 const TokenInfo = () => {
 
-    const { signer, contract, isConnected, account } = useWallet();
+    const { signer, contract, isConnected, account, refreshTrigger } = useWallet();
     const [tokenData, setTokenData] = useState([]);
     const [totalSupply, setTotalSupply] = useState(0);
 
@@ -21,7 +21,7 @@ const TokenInfo = () => {
         }
 
         loadTokenData();
-    }, [contract, signer, isConnected]);
+    }, [contract, signer, isConnected, refreshTrigger]);
 
     return (
         <>

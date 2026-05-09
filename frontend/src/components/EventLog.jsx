@@ -47,7 +47,7 @@ const EventLog = () => {
     return (
         <>
             {
-                isConnected ?
+                isConnected && events.length > 0 ?
                     (
                 <div className="card" style={{
                     border: "1px gray solid", width: "90%", height: "auto", borderRadius: "12px", display: "flex",
@@ -80,8 +80,8 @@ const EventLog = () => {
                                                 </p>
                                                 <span
                                                     style={{
-                                                        padding: "0px 7px", border: "1px solid green", borderRadius: "12px",
-                                                        fontSize: "12px", color: "green", fontWeight: "600"
+                                                        padding: "0px 7px", border: `1px solid ${v.name == "Mint" ? "green" : "orange"}`, borderRadius: "12px",
+                                                        fontSize: "12px", color: `${v.name == "Mint" ? "green" : "orange"}`, fontWeight: "600"
                                                     }}>
                                                     {v.name}
                                                 </span>

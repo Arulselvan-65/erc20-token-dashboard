@@ -8,13 +8,45 @@ const WalletConnect = () => {
     const { setSigner, isConnected, setIsConnected, setContract, account, setAccount, showToast, setIsOwner } = useWallet();
 
     useEffect(() => {
-        window.ethereum.on("chainChanged", () => {
-            setIsConnected(false);
-        });
-        window.ethereum.on("accountsChanged", () => {
-            setIsConnected(false);
-        });
+        if (window.ethereum) {
+            window.ethereum.on("chainChanged", () => {
+                setIsConnected(false);
+            });
+            window.ethereum.on("accountsChanged", () => {
+                setIsConnected(false);
+            });
+        }
     });
+
+    useEffect(() => {
+        reconnectWallet();
+    }, []);
+
+    const reconnectWallet = async () => {
+        try {
+            const accounts = await window.ethereum.request({ method: "eth_accounts" });
+            if (!accounts || accounts.length === 0) return;
+    
+            const session = JSON.parse(localStorage.getItem("wallet_session"));
+            if (!session) return;
+
+            let isExpired = (Date.now() - session.timestamp) > (24 * 60 * 60 * 1000)
+            if (isExpired || accounts[0].toLowerCase() != session.address.toLowerCase()) {
+                localStorage.removeItem("wallet_session");
+                return;
+            }
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+            setIsConnected(true);
+            setSigner(signer);
+            setAccount(session.address);
+            getContract(signer, session.address);
+        } catch (err) {
+            console.log(err)
+            showToast("Wallet connection failed.", "error");
+        }
+    }
 
     const connectWallet = async () => {
         if (!window.ethereum) {
@@ -34,6 +66,11 @@ const WalletConnect = () => {
                 setAccount(address);
                 getContract(signer, address);
                 showToast("Wallet Connected", "success");
+                localStorage.setItem("wallet_session", JSON.stringify({
+                    connected: true,
+                    address: address,
+                    timestamp: Date.now()
+                }))
             } catch (err) {
                 showToast("Wallet connection failed.", "error");
             }

@@ -10,6 +10,9 @@ export const WalletProvider = ({ children }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [contract, setContract] = useState();
     const [isOwner, setIsOwner] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const triggerRefresh = () => setRefreshTrigger(prev => prev + 1); 
 
     const showToast = (text, type) => {
         if (type === "success") {
@@ -36,7 +39,9 @@ export const WalletProvider = ({ children }) => {
                 setContract,
                 showToast,
                 isOwner,
-                setIsOwner
+                setIsOwner,
+                triggerRefresh,
+                refreshTrigger
             }}
         >
             {children}

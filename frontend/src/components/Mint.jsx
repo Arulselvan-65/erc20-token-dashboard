@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 const Mint = () => {
 
-    const { signer, contract, isConnected, account, showToast, isOwner } = useWallet();
+    const { signer, contract, isConnected, account, showToast, isOwner, triggerRefresh } = useWallet();
     const [recipient, setRecipient] = useState([]);
     const [amount, setAmount] = useState(0);
 
@@ -21,9 +21,9 @@ const Mint = () => {
         try {
             const tx = await contract.mint(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
-            contract.on("TokenMinted", showToast("Token Minted", "success"));
-            await new Promise((resolve) => setTimeout(resolve, 4000));
-            window.location.reload();
+            showToast("Token Minted", "success");
+            setContract(contract);
+            triggerRefresh();
             return;
         } catch (err) {
             if (err.code === 4001 || err.code === "ACTION_REJECTED") {

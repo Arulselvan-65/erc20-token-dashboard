@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 const Transfer = () => {
 
-    const { signer, contract, isConnected, account, showToast } = useWallet();
+    const { signer, contract, isConnected, account, showToast, triggerRefresh } = useWallet();
     const [recipient, setRecipient] = useState([]);
     const [amount, setAmount] = useState(0);
 
@@ -22,9 +22,8 @@ const Transfer = () => {
         try {
             const tx = await contract.transfer(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
-            contract.on("Transfer", showToast("Token Transferred", "success"));
-            await new Promise((resolve) => setTimeout(resolve, 4000));
-            window.location.reload();
+            showToast("Token Transferred", "success");
+            triggerRefresh();
             return;
         } catch (err) {
             if (err.code === 4001 || err.code === "ACTION_REJECTED") {
