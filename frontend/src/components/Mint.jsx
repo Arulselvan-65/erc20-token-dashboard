@@ -22,7 +22,6 @@ const Mint = () => {
             const tx = await contract.mint(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
             showToast("Token Minted", "success");
-            setContract(contract);
             triggerRefresh();
             return;
         } catch (err) {

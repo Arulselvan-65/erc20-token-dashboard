@@ -12,7 +12,7 @@ const EventLog = () => {
         if (!isConnected || !contract || !signer) return;
 
         const getEvents = async () => {
-            const fromBlock = 0;
+            const fromBlock = 10827073;
             const toBlock = "latest";
             let logs = [];
             const allEvents = await contract.queryFilter("*", fromBlock, toBlock);

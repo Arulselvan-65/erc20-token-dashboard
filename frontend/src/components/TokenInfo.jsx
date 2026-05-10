@@ -6,7 +6,7 @@ const TokenInfo = () => {
 
     const { signer, contract, isConnected, account, refreshTrigger } = useWallet();
     const [tokenData, setTokenData] = useState([]);
-    
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
     useEffect(() => {
         if (!isConnected || !contract || !signer) return;
 
@@ -18,6 +18,7 @@ const TokenInfo = () => {
             data.push({ key: "Total Supply", value: await contract.totalSupply() / (10n ** 18n) });
             data.push({ key: "Max Supply", value: await contract.MAX_SUPPLY() / (10n ** 18n) });
             setTokenData(data);
+            setIsDataLoaded(true);
         }
 
         loadTokenData();
@@ -26,7 +27,7 @@ const TokenInfo = () => {
     return (
         <>
             {
-                isConnected ?
+                isConnected && isDataLoaded ?
                     (
                 <div className="card" style={{
                     border: "1px gray solid", width: "90%", height: "auto", borderRadius: "12px", display: "flex",
