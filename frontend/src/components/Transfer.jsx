@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "../context/WalletContext";
 import { ethers } from "ethers";
+import TransactionModal from './TransactionModal';
 
 const Transfer = () => {
 
     const { signer, contract, isConnected, account, showToast, triggerRefresh } = useWallet();
     const [recipient, setRecipient] = useState([]);
     const [amount, setAmount] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [status, setStatus] = useState("loading");
+    const [txhash, setTxHash] = useState();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,14 +24,21 @@ const Transfer = () => {
         }
 
         try {
+            setIsModalOpen(true);
+            setStatus("loading");
             const tx = await contract.transfer(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
             showToast("Token Transferred", "success");
+            setTxHash(await tx.hash)
+            setStatus("success");
             triggerRefresh();
+            setRecipient([]);
+            setAmount();
             return;
         } catch (err) {
             if (err.code === 4001 || err.code === "ACTION_REJECTED") {
                 showToast("Transaction denied by user", "error");
+                setStatus("error");
                 return;
             }
             const decodedError = contract.interface.parseError(err.data);
@@ -38,11 +49,16 @@ const Transfer = () => {
                 default:
                     showToast(`Contract error: ${decodedError.name}`, "error");
             }
+            setStatus("error");
         }
     }
 
     return (
         <>
+            {isModalOpen ?
+                <TransactionModal status={status} txhash={txhash} onClose={() => setIsModalOpen(false)} />
+                : ""
+            }
             {
                 isConnected ?
                     (

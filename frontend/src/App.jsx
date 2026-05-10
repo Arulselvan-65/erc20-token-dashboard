@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import viteLogo from './assets/vite.svg';
 import './App.css';
-import WalletConnect from './components/WalletConnect';
 import { useWallet, WalletProvider } from './context/WalletContext';
+import WalletConnect from './components/WalletConnect';
 import TokenInfo from './components/TokenInfo';
 import Mint from './components/Mint';
 import Transfer from './components/Transfer';

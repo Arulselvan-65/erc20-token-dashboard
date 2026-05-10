@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useWallet } from "../context/WalletContext";
+import TransactionModal from './TransactionModal';
 import { ethers } from "ethers";
 
 const Mint = () => {
 
     const { signer, contract, isConnected, account, showToast, isOwner, triggerRefresh } = useWallet();
-    const [recipient, setRecipient] = useState([]);
+    const [recipient, setRecipient] = useState();
     const [amount, setAmount] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [status, setStatus] = useState("loading");
+    const [txhash, setTxHash] = useState();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,14 +23,21 @@ const Mint = () => {
             return;
         }
         try {
+            setIsModalOpen(true);
+            setStatus("loading");
             const tx = await contract.mint(recipient, ethers.parseEther(`${amount}`));
             await tx.wait();
             showToast("Token Minted", "success");
+            setTxHash(await tx.hash)
+            setStatus("success");
             triggerRefresh();
+            setRecipient([]);
+            setAmount();
             return;
         } catch (err) {
             if (err.code === 4001 || err.code === "ACTION_REJECTED") {
                 showToast("Transaction denied by user", "error");
+                setStatus("error");
                 return;
             }
             const decodedError = contract.interface.parseError(err.data);
@@ -40,12 +51,17 @@ const Mint = () => {
                 default:
                     showToast(`Contract error: ${decodedError.name}`, "error");
             }
+            setStatus("error");
         }
     }
 
     return (
         <>
-            { 
+            {isModalOpen ?
+                <TransactionModal status={status} txhash={txhash} onClose={() => setIsModalOpen(false)} />
+                : ""
+            }
+            {
                 (isConnected && isOwner) ?
                     (
                         <div className="card" style={{
@@ -54,7 +70,7 @@ const Mint = () => {
                         }}>
                             <div style={{ justifyItems: "left", marginBottom: "10px" }}>
                                 <p style={{ fontSize: "20px", fontWeight: "bold" }}>
-                                    Mint Tokens 
+                                    Mint Tokens
                                 </p>
                             </div>
 
