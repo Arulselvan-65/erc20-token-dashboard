@@ -58,14 +58,14 @@ HToken Dashboard allows users to connect their MetaMask wallet and interact with
 
 - Node.js v18+
 - MetaMask browser extension
-- Sepolia testnet ETH ([faucet]([https://sepoliafaucet.com](https://sepolia-faucet.pk910.de/)))
+- Sepolia testnet ETH ([faucet](https://sepolia-faucet.pk910.de/))
 
 ### Installation
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/erc20-dashboard
-cd erc20-dashboard
+git clone https://github.com/Arulselvan-65/erc20-token-dashboard
+cd erc20-token-dashboard
 
 # Install contract dependencies
 npm install
