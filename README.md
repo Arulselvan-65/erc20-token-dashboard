@@ -58,7 +58,7 @@ HToken Dashboard allows users to connect their MetaMask wallet and interact with
 
 - Node.js v18+
 - MetaMask browser extension
-- Sepolia testnet ETH ([faucet](https://sepoliafaucet.com))
+- Sepolia testnet ETH ([faucet]([https://sepoliafaucet.com](https://sepolia-faucet.pk910.de/)))
 
 ### Installation
 
