@@ -10,23 +10,28 @@ const WalletConnect = () => {
     useEffect(() => {
         if (window.ethereum) {
             window.ethereum.on("chainChanged", () => {
+                localStorage.removeItem("wallet_session");
                 setIsConnected(false);
             });
             window.ethereum.on("accountsChanged", () => {
+                console.log("trigger")
+                localStorage.removeItem("wallet_session");
                 setIsConnected(false);
             });
         }
     });
 
     useEffect(() => {
-        reconnectWallet();
+        if (!isConnected) {
+            reconnectWallet();
+        }
     }, []);
 
     const reconnectWallet = async () => {
         try {
             const accounts = await window.ethereum.request({ method: "eth_accounts" });
             if (!accounts || accounts.length === 0) return;
-    
+
             const session = JSON.parse(localStorage.getItem("wallet_session"));
             if (!session) return;
 
@@ -35,7 +40,6 @@ const WalletConnect = () => {
                 localStorage.removeItem("wallet_session");
                 return;
             }
-
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             setIsConnected(true);
@@ -43,7 +47,6 @@ const WalletConnect = () => {
             setAccount(session.address);
             getContract(signer, session.address);
         } catch (err) {
-            console.log(err)
             showToast("Wallet connection failed.", "error");
         }
     }
@@ -59,6 +62,12 @@ const WalletConnect = () => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = await provider.getSigner();
                 const address = await signer.getAddress();
+                if ((await provider.getNetwork()).chainId != 11155111) {
+                    await window.ethereum.request({
+                        method: "wallet_switchEthereumChain",
+                        params: [{ chainId: "0xaa36a7" }]
+                    });
+                }
                 const message = `Connect and sign with React DApp at ${new Date().toLocaleString()}`;
                 await signer.signMessage(message);
                 setIsConnected(true);
@@ -75,6 +84,12 @@ const WalletConnect = () => {
                 showToast("Wallet connection failed.", "error");
             }
         }
+    }
+
+    const DisconnectWallet = () => {
+        localStorage.removeItem("wallet_session");
+        window.location.reload();
+
     }
 
     const getContract = async (signer, address) => {
@@ -97,7 +112,7 @@ const WalletConnect = () => {
                                 <p>Wallet</p>
                                 <p>{account.slice(0, 6)}...{account.slice(-4)}</p>
                             </div>
-                            <div style={{ alignContent: "center" }}>
+                            <div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <div style={{
                                         borderRadius: "50%", height: "10px", width: "10px",
@@ -105,6 +120,11 @@ const WalletConnect = () => {
                                     }}></div>
                                     <p>Connected</p>
                                 </div>
+                                <button style={{
+                                    width: "106px", padding: "0px", height: "25px", borderRadius: "5px",
+                                    backgroundColor: "transparent", fontWeight: "normal", border: "1px solid #fb542b",
+                                    color: "#fb542b"
+                                }} onClick={DisconnectWallet}>Disconnect</button>
                             </div>
                         </div>
                     )

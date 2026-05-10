@@ -104,11 +104,6 @@
       "type": "error"
     },
     {
-      "inputs": [],
-      "name": "InsufficientBalance",
-      "type": "error"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -455,5 +450,5 @@
       "type": "function"
     }
   ],
-  "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  "address": "0xDC51E177760b173078BCa487B924C053840F1823"
 }

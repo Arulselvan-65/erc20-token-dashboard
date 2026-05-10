@@ -49,57 +49,59 @@ const EventLog = () => {
             {
                 isConnected && events.length > 0 ?
                     (
-                <div className="card" style={{
-                    border: "1px gray solid", width: "90%", height: "auto", borderRadius: "12px", display: "flex",
-                    flexDirection: "column", padding: "15px", flexWrap: "wrap"
-                }}>
-                    <div style={{ justifyItems: "left", marginBottom: "10px" }}>
-                        <p style={{ fontSize: "20px", fontWeight: "bold" }}>
-                            Transaction History
-                        </p>
-                    </div>
+                        <div className="card" style={{
+                            border: "1px gray solid", width: "94%", height: "auto", borderRadius: "12px", display: "flex",
+                            flexDirection: "column", padding: "15px", boxSizing: "border-box"
+                        }}>
+                            <div style={{ marginBottom: "10px", justifyItems: "left" }}>
+                                <p style={{ fontSize: "20px", fontWeight: "bold", margin: 0, display: "block" }}>
+                                    Transaction History
+                                </p>
+                            </div>
 
-                    <div style={{ display: "flex", justifyContent: "flex-start", flexWrap: "wrap", gap: "15px", width: "100%", flexDirection: "column" }}>
-                        {
-                            events.map((v, i) => {
-                                return (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "0px", width: "100%" }}>
+                                {events.map((v, i) => (
                                     <div key={i} style={{
-                                        minWidth: "120px", borderBottom: "1px gray solid", justifyContent: "space-between",
-                                        justifyItems: "left", padding: "10px", display: "flex", fontSize: "16px"
+                                        borderBottom: "1px gray solid",
+                                        padding: "10px 0",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        flexWrap: "wrap",
                                     }}>
-                                        <div>
-                                            <div style={{
-                                                display: "flex", alignItems: "center", gap: "10px", width: "100%"
-                                            }}>
-                                                <p style={{ margin: 0 }}>
-                                                    {v.from.slice(0, 6)}...
-                                                    {v.from.slice(-4)}
+
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: 0 }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                                                <p style={{ margin: 0, fontSize: "14px", wordBreak: "break-all" }}>
+                                                    {v.from.slice(0, 6)}...{v.from.slice(-4)}
                                                     {" "}➜{" "}
-                                                    {v.to.slice(0, 6)}...
-                                                    {v.to.slice(-4)}
+                                                    {v.to.slice(0, 6)}...{v.to.slice(-4)}
                                                 </p>
-                                                <span
-                                                    style={{
-                                                        padding: "0px 7px", border: `1px solid ${v.name == "Mint" ? "green" : "orange"}`, borderRadius: "12px",
-                                                        fontSize: "12px", color: `${v.name == "Mint" ? "green" : "orange"}`, fontWeight: "600"
-                                                    }}>
+                                                <span style={{
+                                                    padding: "0px 7px",
+                                                    border: `1px solid ${v.name === "Mint" ? "green" : "orange"}`,
+                                                    borderRadius: "12px",
+                                                    fontSize: "12px",
+                                                    color: v.name === "Mint" ? "green" : "orange",
+                                                    fontWeight: "600",
+                                                    whiteSpace: "nowrap",
+                                                }}>
                                                     {v.name}
                                                 </span>
                                             </div>
-                                            <p style={{ color: "gray", display: "flex" }}>Block {v.block}</p>
+                                            <p style={{ color: "gray", margin: 0, fontSize: "13px", textAlign: "left" }}>Block {v.block}</p>
                                         </div>
-                                        <div style={{ alignItems: "center", display: "flex" }}>
-                                            <p>{v.amount} HTK</p>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
 
-                </div>
-                )
-                : ""
+                                        <p style={{ margin: 0, fontWeight: "600", whiteSpace: "nowrap" }}>
+                                            {v.amount} HTK
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                    : ""
             }
         </>
     )

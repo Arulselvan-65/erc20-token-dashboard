@@ -16,6 +16,9 @@ module.exports = {
   },
   etherscan: {
     apiKey: apiKey
+  },
+  sourcify: {
+    enabled: true
   }
 
 };

@@ -6,8 +6,7 @@ const TokenInfo = () => {
 
     const { signer, contract, isConnected, account, refreshTrigger } = useWallet();
     const [tokenData, setTokenData] = useState([]);
-    const [totalSupply, setTotalSupply] = useState(0);
-
+    
     useEffect(() => {
         if (!isConnected || !contract || !signer) return;
 
@@ -15,8 +14,9 @@ const TokenInfo = () => {
             let data = [];
             data.push({ key: "Name", value: await contract.name() });
             data.push({ key: "Symbol", value: await contract.symbol() });
-            data.push({ key: "Total Supply", value: await contract.totalSupply() / (10n ** 18n) });
             data.push({ key: "Your Balance", value: await contract.balanceOf(account) / (10n ** 18n) });
+            data.push({ key: "Total Supply", value: await contract.totalSupply() / (10n ** 18n) });
+            data.push({ key: "Max Supply", value: await contract.MAX_SUPPLY() / (10n ** 18n) });
             setTokenData(data);
         }
 
@@ -41,7 +41,7 @@ const TokenInfo = () => {
                                 return (
                                     <div key={i} style={{
                                         minWidth: "120px",
-                                        flex: "1 1 150px", border: "1px gray solid",
+                                        flex: "1 1 120px", border: "1px gray solid",
                                         borderRadius: "10px", justifyItems: "left", padding: "10px"
                                     }}>
                                         <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "5px" }}>{v.key}</p>
