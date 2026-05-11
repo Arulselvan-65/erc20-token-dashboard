@@ -23,6 +23,8 @@ function App() {
         closeOnClick
         pauseOnHover
         theme="dark"
+        toastStyle={{ zIndex: 100000 }}
+        style={{ zIndex: 100000 }}
       />
       <WalletProvider>
         <section id="center">

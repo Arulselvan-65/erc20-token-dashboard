@@ -59,7 +59,7 @@ const EventLog = () => {
                                 </p>
                             </div>
 
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0px", width: "100%" }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "0px", width: "100%", height: "350px", overflowY: "auto" }}>
                                 {events.map((v, i) => (
                                     <div key={i} style={{
                                         borderBottom: "1px gray solid",

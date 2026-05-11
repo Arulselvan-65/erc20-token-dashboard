@@ -7,7 +7,7 @@ const Transfer = () => {
 
     const { signer, contract, isConnected, account, showToast, triggerRefresh } = useWallet();
     const [recipient, setRecipient] = useState([]);
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [status, setStatus] = useState("loading");
     const [txhash, setTxHash] = useState();
@@ -83,6 +83,7 @@ const Transfer = () => {
                                         type="text"
                                         required={true}
                                         placeholder="0xf39F...7265"
+                                        value={recipient}
                                         onChange={(e) => setRecipient(e.target.value)}
                                     />
                                 </div>
@@ -92,7 +93,9 @@ const Transfer = () => {
                                         type="number"
                                         required={true}
                                         placeholder="100"
-                                        onChange={(e) => setAmount(e.target.value)} />
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        />
                                 </div>
                                 <div>
                                     <button>

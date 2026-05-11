@@ -7,7 +7,7 @@ const Mint = () => {
 
     const { signer, contract, isConnected, account, showToast, isOwner, triggerRefresh } = useWallet();
     const [recipient, setRecipient] = useState();
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [status, setStatus] = useState("loading");
     const [txhash, setTxHash] = useState();
@@ -31,8 +31,8 @@ const Mint = () => {
             setTxHash(await tx.hash)
             setStatus("success");
             triggerRefresh();
-            setRecipient([]);
-            setAmount();
+            setRecipient("");
+            setAmount("");
             return;
         } catch (err) {
             if (err.code === 4001 || err.code === "ACTION_REJECTED") {
@@ -85,6 +85,7 @@ const Mint = () => {
                                         type="text"
                                         required={true}
                                         placeholder="0xf39F...7265"
+                                        value={recipient}
                                         onChange={(e) => setRecipient(e.target.value)}
                                     />
                                 </div>
@@ -94,7 +95,9 @@ const Mint = () => {
                                         type="number"
                                         required={true}
                                         placeholder="100"
-                                        onChange={(e) => setAmount(e.target.value)} />
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                    />
                                 </div>
                                 <div>
                                     <button>
