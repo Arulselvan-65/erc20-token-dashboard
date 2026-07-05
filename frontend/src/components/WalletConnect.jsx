@@ -14,7 +14,6 @@ const WalletConnect = () => {
                 setIsConnected(false);
             });
             window.ethereum.on("accountsChanged", () => {
-                console.log("trigger")
                 localStorage.removeItem("wallet_session");
                 setIsConnected(false);
             });
